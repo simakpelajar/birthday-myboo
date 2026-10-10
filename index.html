@@ -219,7 +219,7 @@ window.unlockGift=function(){window.giftLocked=false;document.getElementById('lo
     if(lit&&!w.value.trim()){err.style.display='block';w.focus();return}
     err.style.display='none';lit=!lit;candles(lit);
     if(!lit){var wish=w.value.trim();document.getElementById('wt').textContent='“'+wish+'”';dn.hidden=false;b.textContent='Nyalakan lagi 🕯️';burst();
-      var url='https://wa.me/628222397894?text='+encodeURIComponent('Harapan ulang tahun ke-23 dari Cipret ♥\n\n“'+wish+'”');
+      var url='https://wa.me/6282232397894?text='+encodeURIComponent('Harapan ulang tahun ke-23 dari Cipret ♥\n\n“'+wish+'”');
       wa.href=url;window.open(url,'_blank');unlockGift()}
     else{dn.hidden=true;b.textContent='Tiup Lilin ✨'}};
   wa.addEventListener('click',function(){unlockGift()});
