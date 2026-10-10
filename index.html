@@ -294,7 +294,7 @@ window.unlockGift=function(){window.giftLocked=false;document.getElementById('lo
 <script>
 /* ---------- TIME LOCK: terbuka mulai 00.00 WIB, 11 Oktober 2026 (dan seterusnya) ---------- */
 (function(){
-  var TARGET=new Date('2026-10-11T00:00:00+07:00').getTime(); // ubah di sini kalau mau tes / ganti waktu
+  var TARGET=new Date('2026-10-10T00:00:00+07:00').getTime(); // ubah di sini kalau mau tes / ganti waktu
   var tl=document.getElementById('tl'),b=document.body,de=document.documentElement,opened=false,base=Date.now(),t0=performance.now();
   window.tlLocked=true;de.classList.add('tl-locked');
   var o='';for(var i=0;i<16;i++)o+='<span class="tlh" style="--x:'+(Math.random()*96)+'%;--s:'+(12+Math.random()*20)+'px;--d:'+(9+Math.random()*10)+'s;--l:-'+(Math.random()*14)+'s">♥</span>';
