@@ -60,9 +60,50 @@ body:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;back
 .bunt{position:absolute;top:0;left:0;width:100%;height:50px;z-index:1}
 .polaroid{background:#fff;padding:8px 8px 22px;width:104px;color:var(--ink);font-size:9px;position:absolute;box-shadow:0 5px 12px rgba(0,0,0,.35)}
 .polaroid i{display:block;height:80px;background:linear-gradient(135deg,var(--rose),var(--gold));font-style:normal;font-size:34px;line-height:80px}
+
+/* ---------- TIME LOCK ---------- */
+html.tl-locked,body.tl-locked{overflow:hidden;height:100%}
+body.tl-locked>section,body.tl-locked #mus{visibility:hidden}
+#tl{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(24px + env(safe-area-inset-top,0px)) 20px calc(24px + env(safe-area-inset-bottom,0px));text-align:center;overflow:hidden;color:var(--paper);
+background:radial-gradient(ellipse at 50% 15%,rgba(255,140,175,.32),transparent 60%),radial-gradient(ellipse at 50% 100%,rgba(232,197,122,.14),transparent 55%),linear-gradient(170deg,#2a0618 0%,#5e0e35 45%,#a02458 100%);transition:opacity 1.5s ease,transform 1.5s ease}
+#tl.fade{opacity:0;transform:scale(1.08);pointer-events:none}
+#tl:before{content:"";position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+#tl.open:before{animation:tlflash 1.1s ease-out}
+@keyframes tlflash{0%{opacity:0}25%{opacity:.75}100%{opacity:0}}
+.tlh{position:absolute;bottom:-40px;left:var(--x);font-size:var(--s);color:#ff6b8b;opacity:.5;animation:tlf var(--d) linear infinite;animation-delay:var(--l);pointer-events:none;text-shadow:none}
+@keyframes tlf{to{transform:translateY(-115vh) rotate(25deg);opacity:0}}
+.tl-lock{width:min(128px,34vw);position:relative;z-index:1;filter:drop-shadow(0 0 18px rgba(255,200,120,.55));animation:tls 3.2s ease-in-out infinite}
+@keyframes tls{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.tl-lock .sh{transform-origin:88px 62px;transition:transform .9s cubic-bezier(.3,1.6,.5,1)}
+#tl.open .tl-lock{animation:tlpop 1s ease}
+#tl.open .tl-lock .sh{transform:translateY(-12px) rotate(30deg)}
+@keyframes tlpop{40%{transform:scale(1.28)}100%{transform:scale(1)}}
+#tl h2{font-weight:400;font-size:clamp(20px,6vw,30px);margin:18px 0 6px;line-height:1.6;position:relative;z-index:1}
+.tl-sub{font-size:clamp(11px,3.1vw,13px);line-height:2;opacity:.92;max-width:340px;position:relative;z-index:1}
+.tl-cd{display:flex;gap:8px;margin:22px 0 14px;position:relative;z-index:1}
+.tl-b{background:rgba(255,241,228,.09);border:1px solid rgba(232,197,122,.5);border-radius:14px;padding:12px 6px;min-width:58px;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.tl-b b{display:block;font-weight:400;font-size:clamp(20px,7vw,30px);color:var(--gold);line-height:1.4}
+.tl-b i{font-style:normal;font-size:10px;opacity:.85}
 </style>
 </head>
-<body>
+<body class="tl-locked">
+<div id="tl">
+  <svg class="tl-lock" viewBox="0 0 120 140" aria-hidden="true">
+    <defs><linearGradient id="tlg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6dc9a"/><stop offset="1" stop-color="#c9a24f"/></linearGradient></defs>
+    <path class="sh" d="M32 64V44a28 28 0 0 1 56 0v20" fill="none" stroke="url(#tlg)" stroke-width="11" stroke-linecap="round"/>
+    <rect x="14" y="60" width="92" height="70" rx="16" fill="url(#tlg)"/>
+    <path d="M60 112c-14-9-16-17-16-22a8 8 0 0 1 16-3 8 8 0 0 1 16 3c0 5-2 13-16 22z" fill="#830000"/>
+  </svg>
+  <h2 id="tlt">Belum waktunya ya… ♥</h2>
+  <div class="tl-sub" id="tls">Kejutan ini terbuka tepat pukul 00.00 WIB<br>11 Oktober 2026</div>
+  <div class="tl-cd">
+    <div class="tl-b"><b id="tld">--</b><i>hari</i></div>
+    <div class="tl-b"><b id="tlh">--</b><i>jam</i></div>
+    <div class="tl-b"><b id="tlm">--</b><i>menit</i></div>
+    <div class="tl-b"><b id="tlsec">--</b><i>detik</i></div>
+  </div>
+  <div class="tl-sub" style="font-size:11px;opacity:.75">sabar sebentar lagi ya, Cipret ✧</div>
+</div>
 <button id="mus" title="Musik">♪</button>
 <canvas id="bg"></canvas>
 <div id="deco"></div>
@@ -245,9 +286,52 @@ window.unlockGift=function(){window.giftLocked=false;document.getElementById('lo
     if(ac.state==='suspended')ac.resume();on=true;btn.classList.remove('off');btn.textContent='♪';sched();timer=setInterval(sched,(24*B+2)*1000)}
   function stop(){on=false;clearInterval(timer);btn.classList.add('off');btn.textContent='✕';ac&&ac.suspend()}
   btn.onclick=function(e){e.stopPropagation();on?stop():start()};
-  var first=false;function auto(){if(!first){first=true;start()}}
-  addEventListener('pointerdown',function(e){if(e.target!==btn)auto()},{once:true});
+  var first=false;function auto(){if(window.tlLocked||first)return;first=true;start()}
+  addEventListener('pointerdown',function(e){if(e.target!==btn)auto()});
   btn.classList.add('off');btn.textContent='♪';
+})();
+</script>
+<script>
+/* ---------- TIME LOCK: terbuka mulai 00.00 WIB, 11 Oktober 2026 (dan seterusnya) ---------- */
+(function(){
+  var TARGET=new Date('2026-10-11T00:00:00+07:00').getTime(); // ubah di sini kalau mau tes / ganti waktu
+  var tl=document.getElementById('tl'),b=document.body,de=document.documentElement,opened=false,base=Date.now(),t0=performance.now();
+  window.tlLocked=true;de.classList.add('tl-locked');
+  var o='';for(var i=0;i<16;i++)o+='<span class="tlh" style="--x:'+(Math.random()*96)+'%;--s:'+(12+Math.random()*20)+'px;--d:'+(9+Math.random()*10)+'s;--l:-'+(Math.random()*14)+'s">♥</span>';
+  tl.insertAdjacentHTML('afterbegin',o);
+  function now(){return base+(performance.now()-t0)}
+  function pad(n){return n<10?'0'+n:''+n}
+  function unlockUI(){window.tlLocked=false;b.classList.remove('tl-locked');de.classList.remove('tl-locked')}
+  function openNow(anim){
+    if(opened)return;opened=true;
+    if(!anim){unlockUI();tl.remove();return}
+    document.getElementById('tlt').textContent='Sudah waktunya ♥';
+    document.getElementById('tls').textContent='Selamat ulang tahun, Cipret!';
+    tl.classList.add('open');
+    setTimeout(function(){var fx=document.getElementById('fx');fx.style.zIndex=101;unlockUI();tl.classList.add('fade');
+      if(window.burst){burst();setTimeout(burst,500);setTimeout(burst,1100)}
+      setTimeout(function(){tl.remove();fx.style.zIndex=''},1700)},1300);
+  }
+  function tick(){
+    var left=TARGET-now();
+    if(left<=0){openNow(true);return}
+    var t=Math.floor(left/1000);
+    document.getElementById('tld').textContent=pad(Math.floor(t/86400));
+    document.getElementById('tlh').textContent=pad(Math.floor(t%86400/3600));
+    document.getElementById('tlm').textContent=pad(Math.floor(t%3600/60));
+    document.getElementById('tlsec').textContent=pad(t%60);
+    setTimeout(tick,250);
+  }
+  function go(){if(TARGET-now()<=0)openNow(false);else tick()}
+  // sinkron dengan jam server (header Date) kalau halaman di-host; kalau gagal pakai jam perangkat
+  var done=false;function fin(){if(!done){done=true;go()}}
+  try{
+    var ac=new AbortController(),to=setTimeout(function(){ac.abort();fin()},2500);
+    fetch(location.href.split('#')[0],{method:'HEAD',cache:'no-store',signal:ac.signal}).then(function(r){
+      var d=r.headers.get('Date'),sv=d?new Date(d).getTime():NaN;
+      if(!isNaN(sv)){base=sv;t0=performance.now()}
+      clearTimeout(to);fin()}).catch(function(){clearTimeout(to);fin()});
+  }catch(e){fin()}
 })();
 </script>
 </body>
